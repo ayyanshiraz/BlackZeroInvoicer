@@ -1,0 +1,122 @@
+name: Build Cross-Platform Apps
+
+on:
+  push:
+    branches: [ "main" ] # Runs when you push to the main branch
+
+jobs:
+  #########################################
+  # BUILD FOR LINUX (DEBIAN/KALI/UBUNTU)
+  #########################################
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-3.0
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --name BlackZeroInvoicer \
+                    --add-data "templates:templates" \
+                    --icon="templates/logo.png" \
+                    --hidden-import=webview.platforms.gtk \
+                    app.py
+
+    - name: Archive Linux App
+      uses: actions/upload-artifact@v4
+      with:
+        name: BlackZeroInvoicer-Linux
+        path: dist/BlackZeroInvoicer
+
+  #########################################
+  # BUILD FOR WINDOWS (INSTALLER)
+  #########################################
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build with PyInstaller
+      run: |
+        # Note the Windows path separator ";" and ".ico" icon
+        pyinstaller --name BlackZeroInvoicer `
+                    --add-data "templates;templates" `
+                    --icon="logo.ico" `
+                    app.py
+
+    - name: Setup Inno Setup
+      uses: joncloud/setup-iscc@v2
+      with:
+        version: '6.2.2'
+
+    - name: Build Windows Installer
+      run: iscc setup.iss
+
+    - name: Archive Windows Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: BlackZeroInvoicer-Windows-Installer
+        path: Setup-BlackZeroInvoicer.exe
+
+  #########################################
+  # BUILD FOR MACOS
+  #########################################
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build with PyInstaller
+      run: |
+        # Note the Mac path separator ":" and .png icon
+        pyinstaller --name BlackZeroInvoicer \
+                    --add-data "templates:templates" \
+                    --icon="templates/logo.png" \
+                    app.py
+
+    - name: Archive macOS App
+      uses: actions/upload-artifact@v4
+      with:
+        name: BlackZeroInvoicer-macOS
+        # PyInstaller creates a .app bundle (a folder) on Mac
+        path: dist/BlackZeroInvoicer.app
