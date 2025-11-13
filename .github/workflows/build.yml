@@ -34,6 +34,7 @@ jobs:
     - name: Build with PyInstaller
       run: |
         pyinstaller --name BlackZeroInvoicer \
+                    --clean \
                     --add-data "templates:templates" \
                     --icon="templates/logo.png" \
                     --hidden-import=webview.platforms.gtk \
@@ -42,7 +43,7 @@ jobs:
     - name: Archive Linux App
       uses: actions/upload-artifact@v4
       with:
-        name: BlackZeroInGivoicer-Linux
+        name: BlackZeroInvoicer-Linux
         path: dist/BlackZeroInvoicer
 
   #########################################
@@ -70,13 +71,13 @@ jobs:
       run: |
         # Note the Windows path separator ";" and ".ico" icon
         pyinstaller --name BlackZeroInvoicer `
+                    --clean `
                     --add-data "templates;templates" `
                     --icon="logo.ico" `
                     app.py
 
     - name: Setup Inno Setup
-      # --- FIX 3: TRYING ANOTHER ACTION ---
-      uses: kymckay/setup-inno-setup@v1
+      uses: Minionguy/setup-inno-setup@v1.1
       with:
         version: '6.2.2'
 
@@ -114,6 +115,7 @@ jobs:
       run: |
         # Note the Mac path separator ":" and .png icon
         pyinstaller --name BlackZeroInvoicer \
+                    --clean \
                     --add-data "templates:templates" \
                     --icon="templates/logo.png" \
                     app.py
