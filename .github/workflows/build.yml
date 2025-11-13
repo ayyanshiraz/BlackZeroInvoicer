@@ -28,6 +28,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install pyinstaller  # <-- FIX 1: ADDED THIS
         pip install -r requirements.txt
 
     - name: Build with PyInstaller
@@ -62,6 +63,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install pyinstaller  # <-- FIX 1: ADDED THIS
         pip install -r requirements.txt
 
     - name: Build with PyInstaller
@@ -73,7 +75,8 @@ jobs:
                     app.py
 
     - name: Setup Inno Setup
-      uses: joncloud/setup-iscc@v2
+      # --- FIX 2: REPLACED BROKEN ACTION ---
+      uses: Amey-Shetty/setup-inno-setup@v1
       with:
         version: '6.2.2'
 
@@ -104,6 +107,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install pyinstaller  # <-- FIX 1: ADDED THIS
         pip install -r requirements.txt
 
     - name: Build with PyInstaller
