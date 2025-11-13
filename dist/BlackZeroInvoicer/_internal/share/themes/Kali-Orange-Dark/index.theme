@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Kali-Orange-Dark
+Comment=The Kali Orange Default Theme
+Encoding=UTF-8
+
+
+[X-GNOME-Metatheme]
+GtkTheme=Kali-Orange-Dark
+MetacityTheme=Kali-Orange-Dark
+IconTheme=Flat-Remix-Orange-Dark
+CursorTheme=Adwaita
+ButtonLayout=:minimize,maximize,close

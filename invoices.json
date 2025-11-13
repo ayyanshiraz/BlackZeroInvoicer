@@ -1,0 +1,119 @@
+[
+  {
+    "invoice_num": "0000-08",
+    "client_name": "Zahid Baig",
+    "client_address": "69 G, Aashiana Shopping Center, Main Blvd Gulberg, Block D1 Gulberg III, Lahore",
+    "client_business": "Pakistan Academy",
+    "client_phone": "0314848024",
+    "paid_to": "Ayyan Shiraz",
+    "payment_status": "Unpaid",
+    "bank_key": "blackzero_faysal",
+    "paid_amount": 6200.0,
+    "line_items": [
+      {
+        "desc": "Meta Advertisement Campaign",
+        "qty": 10.0,
+        "rate": 620.0
+      }
+    ],
+    "grand_total": 6200.0,
+    "qty_label": "DAYS",
+    "date_time_str": "11/10/2025 05:05 PM",
+    "date_str": "11/10/2025",
+    "time_str": "05:05 PM"
+  },
+  {
+    "invoice_num": "0003-02",
+    "client_name": "Jameel Ur Rehman",
+    "client_address": "MashaAllah Center, 213-A, opp. Car Parking Grand Mosque, Commercial Sector C Bahria Town, Lahore, 53720",
+    "client_business": "Al Madina Hijama Center",
+    "client_phone": "0300 7598000",
+    "paid_to": "Ayyan Shiraz",
+    "payment_status": "Paid",
+    "bank_key": "blackzero_faysal",
+    "paid_amount": 60000.0,
+    "line_items": [
+      {
+        "desc": "Website Development (Coded Website)",
+        "qty": 1.0,
+        "rate": 100000.0
+      }
+    ],
+    "grand_total": 100000.0,
+    "qty_label": "QTY",
+    "date_time_str": "11/10/2025 05:07 PM",
+    "date_str": "11/10/2025",
+    "time_str": "05:07 PM"
+  },
+  {
+    "invoice_num": "0006-01",
+    "client_name": "Sir Moazam & Kamran",
+    "client_address": " F-1 Canal Cottages, Block A Muslim Town, Lahore, 54000",
+    "client_business": "Starlite Linker",
+    "client_phone": "+44 7465746637",
+    "paid_to": "Main Hashim Haroon",
+    "payment_status": "Unpaid",
+    "bank_key": "blackzero_faysal",
+    "paid_amount": 0.0,
+    "line_items": [
+      {
+        "desc": "Website Development (Custom Coded)",
+        "qty": 1.0,
+        "rate": 349999.0
+      },
+      {
+        "desc": "Website Portal (Product Related)",
+        "qty": 1.0,
+        "rate": 113999.0
+      }
+    ],
+    "grand_total": 463998.0,
+    "qty_label": "QTY",
+    "date_time_str": "11/13/2025 11:40 AM",
+    "date_str": "11/13/2025",
+    "time_str": "11:40 AM"
+  },
+  {
+    "invoice_num": "0007-01",
+    "client_name": "Emran Ahmed",
+    "client_address": "Bayswater St - off 602 - Business Bay - Dubai - United Arab Emirates",
+    "client_business": "BizVibeZ Group of Companies",
+    "client_phone": "+971 55 436 8331",
+    "paid_to": "Main Hashim Haroon",
+    "payment_status": "Unpaid",
+    "bank_key": "blackzero_faysal",
+    "paid_amount": 50000.0,
+    "line_items": [
+      {
+        "desc": "Website Handling (Consultancy)",
+        "qty": 1.0,
+        "rate": 20000.0
+      },
+      {
+        "desc": "Website Handling (Properties)",
+        "qty": 1.0,
+        "rate": 20000.0
+      },
+      {
+        "desc": "Search Engine Optimisation (Consultancy)",
+        "qty": 1.0,
+        "rate": 30000.0
+      },
+      {
+        "desc": "Email Resolution ",
+        "qty": 1.0,
+        "rate": 25000.0
+      },
+      {
+        "desc": "Social Media Management",
+        "qty": 1.0,
+        "rate": 15000.0
+      }
+    ],
+    "grand_total": 110000.0,
+    "qty_label": "QTY",
+    "date_time_str": "11/13/2025 11:46 AM",
+    "date_str": "11/13/2025",
+    "time_str": "11:46 AM"
+  }
+]

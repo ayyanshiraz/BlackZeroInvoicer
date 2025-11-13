@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Black Zero Invoice Generator</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; max-width: 800px; }
+        input, select { width: 300px; padding: 5px; margin-bottom: 10px; box-sizing: border-box; }
+        input[readonly] { background-color: #eee; }
+        .item-row { display: flex; gap: 5px; margin-top: 10px; }
+        .item-row input:nth-child(1) { flex: 4; } /* Description */
+        .item-row input:nth-child(2) { flex: 1; } /* Qty */
+        .item-row input:nth-child(3) { flex: 1; } /* Rate */
+        hr { margin: 20px 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        /* Search Styles */
+        #search-results ul { list-style: none; padding-left: 0; }
+        #search-results li { background: #f4f4f4; padding: 10px; margin-bottom: 5px; border-radius: 4px; }
+        #search-results a { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Black Zero Invoice Generator</h2>
+    
+    <form action="/generate-pdf" method="POST">
+        <div class="grid">
+            <div>
+                <h3>Client Details</h3>
+                <label for="client_name">Client Name:</label><br>
+                <input list="client-names" id="client_name" name="client_name" oninput="onClientSelect()" required>
+                <datalist id="client-names">
+                    {% for client in client_data_by_name %}
+                        <option value="{{ client }}"></option>
+                    {% endfor %}
+                </datalist>
+                <br>
+                
+                <label for="client_business">Client Business:</label><br>
+                <input list="business-names" id="client_business" name="client_business" oninput="onBusinessSelect()">
+                <datalist id="business-names">
+                    {% for business in client_data_by_business %}
+                        <option value="{{ business }}"></option>
+                    {% endfor %}
+                </datalist>
+                <br>
+                
+                <label for="client_address">Client Address:</label><br>
+                <input type="text" id="client_address" name="client_address"><br>
+
+                <label for="client_phone">Client Phone:</label><br>
+                <input type="text" id="client_phone" name="client_phone"><br>
+            </div>
+            
+            <div>
+                <h3>Invoice Details</h3>
+                
+                <label>Next Invoice Number:</label><br>
+                <input type="text" id="invoice_num_display" name="invoice_num" readonly><br>
+
+                <label>Paid To:</label><br>
+                <select name="paid_to">
+                    <option value="Main Hashim Haroon">Main Hashim Haroon</option>
+                    <option value="Ayyan Shiraz" selected>Ayyan Shiraz</option>
+                </select><br>
+
+                <label>Bank Account to Display:</label><br>
+                <select name="bank_account">
+                    <option value="hashim_mcb">M Hashim Haroon (MCB)</option>
+                    <option value="ayyan_meezan">Ayyan Shiraz (Meezan)</option>
+                    <option value="blackzero_faysal" selected>Black Zero (Faysal)</option>
+                </select><br>
+
+                <label>Payment Status:</label><br>
+                <select name="payment_status">
+                    <option value="Unpaid">Unpaid</option>
+                    <option value="Paid">Paid</option>
+                </select><br>
+                
+                <label>Amount Paid (if any):</label><br>
+                <input type="number" id="paid_amount" name="paid_amount" value="0" step="any"><br>
+            </div>
+        </div>
+
+        <h3>Line Items</h3>
+        <label>Quantity Label (e.g., QTY, Days, Hours):</label><br>
+        <input type="text" name="qty_label" value="QTY" style="width: 300px; margin-bottom: 10px;">
+        
+        <div id="line-items">
+            <div class="item-row">
+                <input type="text" name="item_desc[]" placeholder="Item Description" required>
+                <input type="number" name="item_qty[]" placeholder="Qty/Days" step="any" required oninput="updateTotals()">
+                <input type="number" name="item_rate[]" placeholder="Rate" step="any" required oninput="updateTotals()">
+            </div>
+        </div>
+        <button type="button" onclick="addItem()">+ Add Item</button>
+        <hr>
+        <input type="submit" value="Generate PDF Invoice" style="font-weight: bold; padding: 10px;">
+    </form>
+    
+    <hr>
+    <h3>Find Invoice</h3>
+    <input type="text" id="search_query" placeholder="Search by Invoice #, Name, Business, or Phone" style="width: 400px;">
+    <button type="button" onclick="searchInvoices()">Search</button>
+    <div id="search-results" style="margin-top: 20px;"></div>
+
+    <script>
+        const clientDataByName = {{ client_data_by_name_json|safe }};
+        const clientDataByBusiness = {{ client_data_by_business_json|safe }};
+
+        // --- NEW: Auto-calculates Amount Paid ---
+        function updateTotals() {
+            let qtys = document.getElementsByName('item_qty[]');
+            let rates = document.getElementsByName('item_rate[]');
+            let total = 0;
+            
+            for (let i = 0; i < qtys.length; i++) {
+                let qty = parseFloat(qtys[i].value) || 0;
+                let rate = parseFloat(rates[i].value) || 0;
+                total += (qty * rate);
+            }
+            
+            // Set the 'Amount Paid' field. User can override this.
+            document.getElementById('paid_amount').value = total.toFixed(2);
+        }
+
+        // --- Auto-fill Client Details ---
+        async function getNextInvoiceNum(clientName) {
+            if (!clientName) {
+                document.getElementById('invoice_num_display').value = "---";
+                return;
+            }
+            try {
+                const response = await fetch(`/get-next-invoice-num?client_name=${encodeURIComponent(clientName)}`);
+                const data = await response.json();
+                if (data.invoice_num) {
+                    document.getElementById('invoice_num_display').value = data.invoice_num;
+                } else if (data.error) {
+                    // Handle server error (like KeyError)
+                    document.getElementById('invoice_num_display').value = "Error";
+                }
+            } catch (error) {
+                document.getElementById('invoice_num_display').value = "Error";
+            }
+        }
+
+        function onClientSelect() {
+            let selectedName = document.getElementById('client_name').value;
+            if (clientDataByName[selectedName]) {
+                document.getElementById('client_address').value = clientDataByName[selectedName].address;
+                document.getElementById('client_business').value = clientDataByName[selectedName].business;
+                document.getElementById('client_phone').value = clientDataByName[selectedName].phone;
+            }
+            getNextInvoiceNum(selectedName);
+        }
+
+        function onBusinessSelect() {
+            let selectedBusiness = document.getElementById('client_business').value;
+            let clientName = "";
+            if (clientDataByBusiness[selectedBusiness]) {
+                clientName = clientDataByBusiness[selectedBusiness].name;
+                document.getElementById('client_name').value = clientName;
+                document.getElementById('client_address').value = clientDataByBusiness[selectedBusiness].address;
+                document.getElementById('client_phone').value = clientDataByBusiness[selectedBusiness].phone;
+            }
+            getNextInvoiceNum(clientName);
+        }
+
+        function addItem() {
+            let itemContainer = document.getElementById('line-items');
+            let newRow = document.createElement('div');
+            newRow.classList.add('item-row');
+            newRow.innerHTML = `
+                <input type="text" name="item_desc[]" placeholder="Item Description" required>
+                <input type="number" name="item_qty[]" placeholder="Qty/Days" step="any" required oninput="updateTotals()">
+                <input type="number" name="item_rate[]" placeholder="Rate" step="any" required oninput="updateTotals()">
+            `;
+            itemContainer.appendChild(newRow);
+        }
+
+        // --- Search Invoice Function ---
+        async function searchInvoices() {
+            let query = document.getElementById('search_query').value;
+            let resultsDiv = document.getElementById('search-results');
+            if (!query) {
+                resultsDiv.innerHTML = "<p>Please enter a search term.</p>";
+                return;
+            }
+            resultsDiv.innerHTML = "<p>Searching...</p>";
+            
+            try {
+                const response = await fetch(`/search-invoices?query=${encodeURIComponent(query)}`);
+                const results = await response.json();
+                
+                if (results.length === 0) {
+                    resultsDiv.innerHTML = "<p>No invoices found.</p>";
+                    return;
+                }
+                
+                let html = "<ul>";
+                for (const invoice of results) {
+                    html += `
+                        <li>
+                            <a href="/view-invoice/${invoice.invoice_num}" target="_blank">Invoice #${invoice.invoice_num}</a>
+                            <br>
+                            <strong>Client:</strong> ${invoice.client_name} (${invoice.client_business})
+                            <strong>Total:</strong> ${invoice.grand_total.toFixed(2)}
+                        </li>
+                    `;
+                }
+                html += "</ul>";
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = "<p>An error occurred.</p>";
+            }
+        }
+    </script>
+</body>
+</html>

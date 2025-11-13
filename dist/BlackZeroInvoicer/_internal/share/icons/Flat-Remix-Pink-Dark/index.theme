@@ -1,0 +1,22 @@
+[Icon Theme]
+Name=Flat-Remix-Pink-Dark
+Comment=Flat Remix Pink ICON theme for dark interfaces
+Inherits=Flat-Remix-Blue-Dark
+
+Example=folder
+
+Directories=apps/scalable,places/scalable
+
+[apps/scalable]
+Context=Applications
+Size=512
+MinSize=16
+MaxSize=512
+Type=Scalable
+
+[places/scalable]
+Context=Places
+Size=512
+MinSize=16
+MaxSize=512
+Type=Scalable

@@ -1,0 +1,30 @@
+{
+  "Zahid Baig": {
+    "address": "69 G, Aashiana Shopping Center, Main Blvd Gulberg, Block D1 Gulberg III, Lahore",
+    "business": "Pakistan Academy",
+    "phone": "0314848024",
+    "client_id": "0000",
+    "invoice_count": 8
+  },
+  "Jameel Ur Rehman": {
+    "address": "MashaAllah Center, 213-A, opp. Car Parking Grand Mosque, Commercial Sector C Bahria Town, Lahore, 53720",
+    "business": "Al Madina Hijama Center",
+    "phone": "03007598000",
+    "client_id": "0003",
+    "invoice_count": 2
+  },
+  "Sir Moazam & Kamran": {
+    "address": " F-1 Canal Cottages, Block A Muslim Town, Lahore, 54000",
+    "business": "Starlite Linker",
+    "phone": "+44 7465746637",
+    "client_id": "0006",
+    "invoice_count": 1
+  },
+  "Emran Ahmed": {
+    "address": "Bayswater St - off 602 - Business Bay - Dubai - United Arab Emirates",
+    "business": "BizVibeZ Group of Companies",
+    "phone": "+971 55 436 8331",
+    "client_id": "0007",
+    "invoice_count": 1
+  }
+}
