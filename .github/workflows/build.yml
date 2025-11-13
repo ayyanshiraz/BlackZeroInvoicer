@@ -28,7 +28,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller  # <-- FIX 1: ADDED THIS
+        pip install pyinstaller
         pip install -r requirements.txt
 
     - name: Build with PyInstaller
@@ -42,7 +42,7 @@ jobs:
     - name: Archive Linux App
       uses: actions/upload-artifact@v4
       with:
-        name: BlackZeroInvoicer-Linux
+        name: BlackZeroInGivoicer-Linux
         path: dist/BlackZeroInvoicer
 
   #########################################
@@ -63,7 +63,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller  # <-- FIX 1: ADDED THIS
+        pip install pyinstaller
         pip install -r requirements.txt
 
     - name: Build with PyInstaller
@@ -75,8 +75,8 @@ jobs:
                     app.py
 
     - name: Setup Inno Setup
-      # --- FIX 2: REPLACED BROKEN ACTION ---
-      uses: Amey-Shetty/setup-inno-setup@v1
+      # --- FIX 3: TRYING ANOTHER ACTION ---
+      uses: kymckay/setup-inno-setup@v1
       with:
         version: '6.2.2'
 
@@ -107,7 +107,7 @@ jobs:
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller  # <-- FIX 1: ADDED THIS
+        pip install pyinstaller
         pip install -r requirements.txt
 
     - name: Build with PyInstaller
